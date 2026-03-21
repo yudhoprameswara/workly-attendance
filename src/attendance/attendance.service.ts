@@ -115,9 +115,28 @@ export class AttendanceService {
   }
 
   async getOneAttendace(id: number) {
-    return this.repo.find({
-      where: { id: id }
-    })
+    const attendance = await this.repo.findOne({ where: { id } });
+
+    if (!attendance) {
+      throw new NotFoundException(`Data absensi #${id} tidak ditemukan`);
+    }
+
+    const convertToBase64 = (filename: string) => {
+      if (!filename) return null;
+      const filePath = join(process.cwd(), 'uploads', filename);
+
+      if (fs.existsSync(filePath)) {
+        const fileBuffer = fs.readFileSync(filePath);
+        return `data:image/jpeg;base64,${fileBuffer.toString('base64')}`;
+      }
+      return null;
+    };
+
+    return {
+      ...attendance,
+      photo_url: convertToBase64(attendance.photo_url), 
+      photo_url_out: convertToBase64(attendance.photo_url_out), 
+    };
   }
 
   async getAll(query: allAttendanceDto) {
@@ -164,9 +183,7 @@ export class AttendanceService {
   async update(id: number, dto: UpdateAttendanceDto) {
     const attendance = await this.repo.findOne({ where: { id } });
     if (!attendance) throw new NotFoundException('Data absensi tidak ditemukan');
-
     Object.assign(attendance, dto);
-
     return await this.repo.save(attendance);
   }
 

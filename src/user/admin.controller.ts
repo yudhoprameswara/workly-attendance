@@ -1,4 +1,4 @@
-import { UseGuards, SetMetadata, Controller, Get, Patch, Param, Body, Post, Delete, ParseIntPipe } from "@nestjs/common";
+import { UseGuards, SetMetadata, Controller, Get, Patch, Param, Body, Post, Delete, ParseIntPipe, Query, Search } from "@nestjs/common";
 import { ApiTags, ApiBearerAuth, ApiParam } from "@nestjs/swagger";
 import { AttendanceService } from "src/attendance/attendance.service";
 import { JwtAuthGuard } from "src/auth/jwt-auth.guard";
@@ -16,7 +16,6 @@ import { UpdateUserDto } from "./dto/update-user.dto";
 export class AdminController {
     constructor(
         private readonly userService: UserService,
-        // private readonly attendanceService: AttendanceService 
     ) { }
 
     @Post('user')
@@ -25,15 +24,22 @@ export class AdminController {
     }
 
     @Get('users')
-    findAll() {
-        return this.userService.findAll();
+    findAll(
+        @Query('page') page: number = 1,
+        @Query('limit') limit: number = 10,
+        @Query('search') search: string = '',
+        @Query('role') role: string = '',
+        @Query('title') title: string = '',
+
+    ) {
+        return this.userService.getAllUser(+page, +limit, search, role, title);
     }
 
     @Patch('update-user/:id')
     update(@Param('id') id: number, @Body() data: UpdateUserDto) {
         return this.userService.update(id, data);
     }
-    
+
     @Delete(':id')
     @ApiParam({ name: 'id', type: Number })
     async remove(@Param('id', ParseIntPipe) id: number) {

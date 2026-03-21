@@ -4,12 +4,14 @@ import {
     Controller,
     Delete,
     Get,
+    NotFoundException,
     Param,
     ParseIntPipe,
     Patch,
     Post,
     Query,
     Req,
+    Res,
     UploadedFile,
     UseGuards,
     UseInterceptors,
@@ -20,6 +22,9 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { AttendanceService } from './attendance.service';
 import { allAttendanceDto } from './dto/allAttendance.dto';
 import { UpdateAttendanceDto } from './dto/update-attendance.dto';
+import { existsSync, readFileSync } from 'fs';
+import { join } from 'path';
+import * as e from 'express';
 
 @UseGuards(JwtAuthGuard)
 @ApiBearerAuth('JWT')
@@ -119,7 +124,7 @@ export class AttendanceController {
         }
     }
 
-    @Get('allAttendace')
+    @Get('all-attendance')
     allAttendance(@Query() query: allAttendanceDto) {
         return this.attendanceService.getAll(query)
     }

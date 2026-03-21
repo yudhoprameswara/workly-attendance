@@ -26,6 +26,9 @@ export class User {
   @Column()
   role: string; 
 
+  @Column()
+  title: string
+
   @OneToMany(() => Attendance, (attendance) => attendance.user)
   attendances: Attendance[];
 }

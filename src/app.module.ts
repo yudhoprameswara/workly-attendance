@@ -5,10 +5,12 @@ import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { AttendanceModule } from './attendance/attendance.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
-    AuthModule, 
+    AuthModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
@@ -18,9 +20,13 @@ import { AttendanceModule } from './attendance/attendance.module';
       database: 'absensi_db',
       autoLoadEntities: true,
       synchronize: true,
-    }), 
+    }),
     UserModule,
-    AttendanceModule],
+    AttendanceModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads'), 
+      serveRoot: '/attendance/image', 
+    }),],
   controllers: [AppController],
   providers: [AppService],
 })

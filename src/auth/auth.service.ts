@@ -24,14 +24,16 @@ export class AuthService {
     const token = this.jwtService.sign({
       userId: user.id,
       username: user.username,
-      role: user.role
+      role: user.role,
+      title: user.title
     });
     return {
       access_token: token,
       user: {
         id: user.id,
         name: user.name,
-        role: user.role
+        role: user.role,
+        title: user.title
       }
     };
   }

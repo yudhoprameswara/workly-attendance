@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { UpdateUserDto } from './dto/update-user.dto';
 
@@ -17,6 +17,7 @@ export class UserService {
     ) { }
 
     async create(data: any) {
+        console.log('data',data)
         const hashedPassword = await bcrypt.hash(data.password, 10);
 
         return this.userRepo.save({
@@ -27,6 +28,44 @@ export class UserService {
 
     findAll() {
         return this.userRepo.find();
+    }
+
+    async getAllUser(page: number, limit: number, search?: string, role?: string, title?: string) {
+        const whereClause: any = {};
+
+        if (role) whereClause.role = role;
+        if (title) whereClause.title = title;
+
+        let finalWhere;
+
+        if (search) {
+            finalWhere = [
+                { ...whereClause, name: ILike(`%${search}%`) },
+                { ...whereClause, email: ILike(`%${search}%`) }
+            ];
+        } else {
+            finalWhere = whereClause;
+        }
+
+        const [data, total] = await this.userRepo.findAndCount({
+            where: finalWhere,
+            take: limit,
+            skip: (page - 1) * limit,
+            order: {
+                name: 'ASC',
+            },
+        });
+
+        return {
+            data,
+            meta: {
+                totalItems: total,
+                itemCount: data.length,
+                itemsPerPage: limit,
+                totalPages: Math.ceil(total / limit),
+                currentPage: page,
+            },
+        };
     }
 
     async changePassword(userId: number, oldPass: string, newPass: string) {

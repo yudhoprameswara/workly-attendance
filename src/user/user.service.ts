@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { ILike, Repository } from 'typeorm';
@@ -17,7 +17,13 @@ export class UserService {
     ) { }
 
     async create(data: any) {
-        console.log('data',data)
+        const existingUser = await this.userRepo.findOne({
+            where: { username: data.username }
+        });
+
+        if (existingUser) {
+            throw new ConflictException('Username ini sudah digunakan, silakan pilih yang lain.');
+        }
         const hashedPassword = await bcrypt.hash(data.password, 10);
 
         return this.userRepo.save({

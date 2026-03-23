@@ -1,0 +1,83 @@
+=========================================================
+      WORKLY ATTENDNACE: FULL-STACK ATTENDANCE SYSTEM
+=========================================================
+Aplikasi absensi karyawan WFH modern dengan desain minimalis.
+Dibuat dengan NestJS (Backend) dan React Vite (Frontend).
+
+---------------------------------------------------------
+1. SPESIFIKASI LINGKUNGAN
+---------------------------------------------------------
+* Node.js          : v20.11.0 (LTS) - (nvm use)
+* Package Manager  : npm
+* Database         : MySQL / Oracle
+* Documentation    : Swagger UI (NestJS)
+
+---------------------------------------------------------
+2. LANGKAH INSTALASI
+---------------------------------------------------------
+
+A. Persiapan Database :
+   Sebelum menjalankan aplikasi, siapkan database Anda:
+   1. Nyalakan MySQL (XAMPP/Docker/Local).
+   2. Buka File absensi_db.sql pada folder Read Me
+   3. Buat database baru dengan nama: absensi_db
+   4. Import file .sql yang tersedia ke dalam database tersebut:
+      > mysql -u [user] -p absensi_db < path/to/your/file.sql
+      (Atau gunakan phpMyAdmin -> Import -> Pilih file .sql)
+
+B. Setup Backend (NestJS):
+   1. Masuk ke direktori: cd workly-attendance
+   2. Install dependensi: npm install
+   3. Setup NVM (Opsional): nvm use
+   4. Salin environment: cp .env.example .env
+   5. Konfigurasi .env: 
+      - Isi DB_USERNAME & DB_PASSWORD sesuai MySQL Anda.
+      - Pastikan DB_DATABASE=absensi_db.
+      - Isi JWT_SECRET dengan kode acak bebas.
+   6. Jalankan server: npm run start:dev
+      (URL Default: http://localhost:3000)
+
+C. Setup Frontend (React + Vite):
+   1. Masuk ke direktori: cd workly-attendance-fe
+   2. Install dependensi: npm install
+   3. Salin environment: cp .env.example .env
+   4. Jalankan aplikasi: npm run dev
+      (URL Default: http://localhost:5173)
+
+---------------------------------------------------------
+3. DOKUMENTASI API (SWAGGER)
+---------------------------------------------------------
+Backend sudah dilengkapi dengan dokumentasi interaktif Swagger.
+Akses melalui browser di:
+URL: http://localhost:3000/api
+
+Gunakan Swagger untuk mencoba endpoint Auth, User, dan 
+Attendance secara langsung tanpa perlu Postman.
+
+---------------------------------------------------------
+4. FITUR UTAMA
+---------------------------------------------------------
+* Database Ready: Skema tabel sudah tersedia di file .sql.
+* JWT Auth: Sistem login aman menggunakan token.
+* Swagger: Dokumentasi API otomatis di path /api.
+* Modern UI: Interface minimalis, artsy, dan responsif.
+
+---------------------------------------------------------
+5. CATATAN KEAMANAN
+---------------------------------------------------------
+* File .env TIDAK disertakan dalam Git (di-ignore).
+* Jangan membagikan file .env yang berisi password asli.
+* Pastikan versi Node.js sesuai agar tidak terjadi error.
+
+---------------------------------------------------------
+6. CATATAN KEAMANAN
+---------------------------------------------------------
+* user login (admin) dapat diakses dengan username: admin,
+   password: 123
+* user login (user) dapat diakses dengan username: yudho1
+   password: 123, atau bisa dengan register akun baru dan 
+   diatur role nya oleh admin di menu user managment
+
+---------------------------------------------------------
+Dibuat dengan semangat oleh: Yudho Prameswara Pamungkas
+=========================================================

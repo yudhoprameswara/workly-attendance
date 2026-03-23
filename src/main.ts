@@ -2,37 +2,44 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-app.useGlobalPipes(new ValidationPipe({
+  const configService = app.get(ConfigService);
+  app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
     transform: true,
     transformOptions: {
-      enableImplicitConversion: true, 
+      enableImplicitConversion: true,
     },
   }));
   const config = new DocumentBuilder()
     .setTitle('Absensi API')
     .setDescription('API untuk absensi WFH')
     .setVersion('1.0')
-       .addBearerAuth(  
+    .addBearerAuth(
       {
         type: 'http',
         scheme: 'bearer',
         bearerFormat: 'JWT',
       },
-      'JWT', 
+      'JWT',
     )
     .build();
 
-    app.use((req, res, next) => {
-  next();
-});
+  app.use((req, res, next) => {
+    next();
+  });
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
-  app.enableCors();
+  app.enableCors(
+    {
+      origin: configService.get('FRONTEND_URL'),
+      credentials: true,
+    }
+  );
   await app.listen(process.env.PORT ?? 3000);
 
 }

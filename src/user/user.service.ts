@@ -55,6 +55,14 @@ export class UserService {
 
         const [data, total] = await this.userRepo.findAndCount({
             where: finalWhere,
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                role: true,
+                title: true,
+                username:true
+            },
             take: limit,
             skip: (page - 1) * limit,
             order: {

@@ -13,16 +13,16 @@ export class Attendance {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @Column({ type: 'datetime' })
+  @Column({ type: 'timestamp' })
   check_in_time: Date;
 
-  @Column({ type: 'datetime', nullable: true })
+  @Column({ type: 'timestamp', nullable: true })
   check_out_time: Date;
 
-  @Column()
+  @Column({ nullable: true })
   photo_url: string;
 
-  @Column()
+  @Column({ nullable: true })
   photo_url_out: string;
 
   @Column({ nullable: true })

@@ -62,8 +62,7 @@ export class AttendanceController {
             ip = ip.replace('::ffff:', '');
         }
         const device = req.headers['user-agent'];
-        
-        // Parse coordinates properly - they might come as strings from formdata
+
         const latitude = dto.latitude ? parseFloat(dto.latitude) : null;
         const longitude = dto.longitude ? parseFloat(dto.longitude) : null;
 
@@ -71,8 +70,8 @@ export class AttendanceController {
             return this.attendanceService.checkIn(
                 req.user.id,
                 file.filename,
-                latitude,
-                longitude,
+                latitude!,
+                longitude!,
                 ip,
                 device,
             );
@@ -122,8 +121,8 @@ export class AttendanceController {
             return await this.attendanceService.checkOut(
                 req.user.id,
                 file.filename,
-                latitude,
-                longitude,
+                latitude!,
+                longitude!,
                 ip,
                 device,
             );

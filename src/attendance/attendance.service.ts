@@ -44,8 +44,8 @@ export class AttendanceService {
       user_id: userId,
       check_in_time: new Date(),
       photo_url: photo,
-      location_in: latitude && longitude ? `${latitude},${longitude}` : null,
-      location_out: null,
+      location_in: latitude + ',' + longitude,
+      location_out: "",
       ip_address: ip,
       device_info: device,
     });
@@ -86,7 +86,7 @@ export class AttendanceService {
     if (photo) attendance.photo_url_out = photo;
     if (ip) attendance.ip_address_out = ip;
     if (device) attendance.device_info_out = device;
-    if (longitude && latitude) attendance.location_out = `${latitude},${longitude}`
+    if (longitude && latitude) attendance.location_out = latitude + ',' + longitude
 
     return this.repo.save(attendance);
   }
@@ -134,8 +134,8 @@ export class AttendanceService {
 
     return {
       ...attendance,
-      photo_url: convertToBase64(attendance.photo_url),
-      photo_url_out: convertToBase64(attendance.photo_url_out),
+      photo_url: convertToBase64(attendance.photo_url), 
+      photo_url_out: convertToBase64(attendance.photo_url_out), 
     };
   }
 

@@ -134,8 +134,8 @@ export class AttendanceService {
 
     return {
       ...attendance,
-      photo_url: convertToBase64(attendance.photo_url), 
-      photo_url_out: convertToBase64(attendance.photo_url_out), 
+      photo_url: convertToBase64(attendance.photo_url),
+      photo_url_out: convertToBase64(attendance.photo_url_out),
     };
   }
 
